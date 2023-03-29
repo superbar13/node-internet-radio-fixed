@@ -35,18 +35,30 @@ function getStationInfo(url, callback, method) {
 	// Resolve the promise from the async function and return the station with the callback
 	// We shouldnt mix callbacks and promises but for backwards compatability I am breaking
 	// the law here......
-	return findStation();
+	return findStation().then(function(station) {
+		callback(null, station);
+	}).catch(function(error) {
+		callback(error);
+	});
 
 	/*
 	@params -> string: url of given stream
 	@returns -> mixed (object if successful, string if error)
 	*/
 	function findStation() {
-    try{this.results = shoutcast.getShoutcastV1Station(url, callback);}catch(e){}
-    try{if (!this.results) this.results = shoutcast.getShoutcastV2Station(url, callback);}catch(e){}
-    try{if (!this.results) this.results = icecast.getIcecastStation(url, callback);}catch(e){}
-    try{if (!this.results) this.results = icystream.getStreamStation(url, callback);}catch(e){}
-    return this.results;
+		// Try to get the station info from the various sources
+		this.results = undefined;
+
+		// Try to get the station info from the various sources
+		if (!this.results) try{this.results = shoutcast.getShoutcastV1Station(url, function() {});}catch(e){}
+		if (!this.results) try{this.results = shoutcast.getShoutcastV2Station(url, function() {});}catch(e){}
+		if (!this.results) try{this.results = icecast.getIcecastStation(url, function() {});}catch(e){}
+		if (!this.results) try{this.results = icystream.getStreamStation(url, function() {});}catch(e){}
+
+		// If we have a result, return it
+		if (this.results) return this.results;
+		// Else return an error
+		else return new Error('Unable to determine current station information.');
 	}
 }
 

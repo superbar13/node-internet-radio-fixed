@@ -46,10 +46,10 @@ function getStationInfo(url, callback, method) {
 		this.results = undefined;
 
 		// Try to get the station info from the various sources
-		if (!this.results) try{shoutcast.getShoutcastV1Station(url, function(err, station) {this.results = station;});}catch(e){}
-		if (!this.results) try{shoutcast.getShoutcastV2Station(url, function(err, station) {this.results = station;});}catch(e){}
-		if (!this.results) try{icecast.getIcecastStation(url, function(err, station) {this.results = station;});}catch(e){}
-		if (!this.results) try{icystream.getStreamStation(url, function(err, station) {this.results = station;});}catch(e){}
+		if (!this.results) try{this.results = shoutcast.getShoutcastV1Station(url, function(err, station) {});}catch(e){}
+		if (!this.results) try{this.results = shoutcast.getShoutcastV2Station(url, function(err, station) {});}catch(e){}
+		if (!this.results) try{this.results = icecast.getIcecastStation(url, function(err, station) {});}catch(e){}
+		if (!this.results) try{this.results = icystream.getStreamStation(url, function(err, station) {});}catch(e){}
 
 		// If we have a result, return it
 		if (this.results) return callback(null, this.results);

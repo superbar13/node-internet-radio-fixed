@@ -35,26 +35,49 @@ function getStationInfo(url, callback, method) {
 	// Resolve the promise from the async function and return the station with the callback
 	// We shouldnt mix callbacks and promises but for backwards compatability I am breaking
 	// the law here......
-	return findStation();
+	return findStation(url)
+    .then(station => {
+      return callback(null, station);
+    })
+    .catch(err => {
+      return callback(err);
+    });
 
 	/*
 	@params -> string: url of given stream
 	@returns -> mixed (object if successful, string if error)
 	*/
-	function findStation() {
-		// Try to get the station info from the various sources
-		this.results = undefined;
+	async function findStation(url) {
+		this.results = await V1(url);
+		// Find which provider has our station
+		if (!this.results) this.results = await V2(url);
+		if (!this.results) this.results = await Ice(url);
+		if (!this.results) this.results = await Icy(url);
+		return this.results;
 
-		// Try to get the station info from the various sources
-		if (!this.results) try{this.results = shoutcast.getShoutcastV1Station(url, function(err, station) {});}catch(e){}
-		if (!this.results) try{this.results = shoutcast.getShoutcastV2Station(url, function(err, station) {});}catch(e){}
-		if (!this.results) try{this.results = icecast.getIcecastStation(url, function(err, station) {});}catch(e){}
-		if (!this.results) try{this.results = icystream.getStreamStation(url, function(err, station) {});}catch(e){}
-
-		// If we have a result, return it
-		if (this.results) return callback(null, this.results);
-		// Else return an error
-		else return callback(new Error('Unable to determine current station information.'));
+		//====================================================================================
+		//=                  Promise wrapper functions                                       =
+		//====================================================================================
+		function V1(url) {
+			return new Promise((resolve, reject) => {
+				try {shoutcast.getShoutcastV1Station(url, function(error, station) {resolve(station);});} catch (err) {reject(err);}
+			});
+		}
+		function V2(url) {
+			return new Promise((resolve, reject) => {
+				try {shoutcast.getShoutcastV2Station(url, function(error, station) {resolve(station);});} catch (err) {reject(err);}
+			});
+		}
+		function Icy(url) {
+			return new Promise((resolve, reject) => {
+				try {icystream.getStreamStation(url, function(error, station) {resolve(station);});} catch (err) {reject(err);}
+			});
+		}
+		function Ice(url) {
+			return new Promise((resolve, reject) => {
+				try {icecast.getIcecastStation(url, function(error, station) {resolve(station);});} catch (err) {reject(err);}
+			});
+		}
 	}
 }
 

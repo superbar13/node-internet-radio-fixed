@@ -1,6 +1,9 @@
 Get internet radio stream details via Node.js.
 Node.js module to get Now Playing information from an internet radio stream in the form of the following object:
 
+Note : Welcome to the fork of my personal fixed version :D (Used in my personals projects) - Superbar13
+You can install it with : npm install superbar13/node-internet-radio-fixed
+
 ```
 { listeners: '89',
   bitrate: '128',

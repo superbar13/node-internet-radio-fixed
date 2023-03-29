@@ -35,11 +35,7 @@ function getStationInfo(url, callback, method) {
 	// Resolve the promise from the async function and return the station with the callback
 	// We shouldnt mix callbacks and promises but for backwards compatability I am breaking
 	// the law here......
-	return findStation().then(function(station) {
-		callback(null, station);
-	}).catch(function(error) {
-		callback(error);
-	});
+	return findStation();
 
 	/*
 	@params -> string: url of given stream
@@ -56,9 +52,9 @@ function getStationInfo(url, callback, method) {
 		if (!this.results) try{icystream.getStreamStation(url, function(err, station) {this.results = station;});}catch(e){}
 
 		// If we have a result, return it
-		if (this.results) return this.results;
+		if (this.results) return callback(null, this.results);
 		// Else return an error
-		else return new Error('Unable to determine current station information.');
+		else return callback(new Error('Unable to determine current station information.'));
 	}
 }
 

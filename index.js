@@ -9,7 +9,7 @@ var StreamSource = {
 	ICECAST: 'ICECAST'
 };
 
-function getStationInfo(url, callback, method, teardownWhenDone, waitTime) {
+function getStationInfo(url, callback, method) {
 	var methodHandler = undefined;
 
 	switch (method) {
@@ -30,7 +30,7 @@ function getStationInfo(url, callback, method, teardownWhenDone, waitTime) {
 
 	// If we have a specific method to fetch from then
 	// attempt only that.
-	if (methodHandler) return methodHandler(url, callback, teardownWhenDone, waitTime);
+	if (methodHandler) return methodHandler(url, callback);
 
 	// Resolve the promise from the async function and return the station with the callback
 	// We shouldnt mix callbacks and promises but for backwards compatability I am breaking
@@ -70,7 +70,7 @@ function getStationInfo(url, callback, method, teardownWhenDone, waitTime) {
 		}
 		function Icy(url) {
 			return new Promise((resolve, reject) => {
-				try {icystream.getStreamStation(url, function(error, station) {resolve(station);}), false} catch (err) {reject(err);}
+				try {icystream.getStreamStation(url, function(error, station) {resolve(station);});} catch (err) {reject(err);}
 			});
 		}
 		function Ice(url) {

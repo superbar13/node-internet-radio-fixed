@@ -14,31 +14,31 @@ var testStream = "https://streamingp.shoutcast.com/NRJPlus";
 
 describe("handle stream data", function () {
 
-  it("Should parse a generic stream", function (done) {
+	it("Should parse a generic stream", function (done) {
 
-    getStreamStation(testStream, function (error, station) {
-      expect(station).to.exist;
-      expect(station).to.have.property('title');
-      expect(station).to.have.property('fetchsource');
-      expect(station).to.have.property('headers');
+		getStreamStation(testStream, function (error, station) {
+			expect(station).to.exist;
+			expect(station).to.have.property('title');
+			expect(station).to.have.property('fetchsource');
+			expect(station).to.have.property('headers');
 
-      expect(station.headers).to.have.property('icy-name');
-      expect(station.headers).to.have.property('icy-br');
-      expect(station.headers).to.have.property('content-type');
+			expect(station.headers).to.have.property('icy-name');
+			expect(station.headers).to.have.property('icy-br');
+			expect(station.headers).to.have.property('content-type');
 
-      expect(station.fetchsource).to.equal(main.StreamSource.STREAM);
-      done();
-    });
-  });
+			expect(station.fetchsource).to.equal(main.StreamSource.STREAM);
+			done();
+		});
+	});
 });
 
 describe("Handle stream redirect", function () {
-  var redirectStream = "http://listen.radionomy.com:80/WitchHouseRadiodotcom";
-  it("Should redirect and return valid data", function (done) {
-    getStreamStation(redirectStream, function (error, station) {
-      expect(station).to.exist;
-      expect(station).to.have.property('title');
-      done();
-    });
-  });
+	var redirectStream = "http://listen.radionomy.com:80/WitchHouseRadiodotcom";
+	it("Should redirect and return valid data", function (done) {
+		getStreamStation(redirectStream, function (error, station) {
+			expect(station).to.exist;
+			expect(station).to.have.property('title');
+			done();
+		});
+	});
 });

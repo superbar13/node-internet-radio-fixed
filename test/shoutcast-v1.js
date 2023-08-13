@@ -8,15 +8,15 @@ var v1TestData = '<HTML><meta http-equiv="Pragma" content="no-cache"></head><bod
 
 
 describe("handle shoutcast v1 data ", function() {
-  it("Should parse a Shoutcast v1 metadata string", function(done) {
+	it("Should parse a Shoutcast v1 metadata string", function(done) {
 
-    parseV1Response(v1TestData, function(error, station) {
-      expect(station).to.exist;
-      expect(station).to.have.property('title');
-      expect(station).to.have.property('fetchsource');
-      expect(station.fetchsource).to.equal(main.StreamSource.SHOUTCAST_V1);
-      done();
-    });
+		parseV1Response(v1TestData, function(error, station) {
+			expect(station).to.exist;
+			expect(station).to.have.property('title');
+			expect(station).to.have.property('fetchsource');
+			expect(station.fetchsource).to.equal(main.StreamSource.SHOUTCAST_V1);
+			done();
+		});
 
-  });
+	});
 });

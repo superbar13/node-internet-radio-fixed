@@ -30,18 +30,18 @@ function getStationInfo(url, callback, method) {
 
 	// If we have a specific method to fetch from then
 	// attempt only that.
-	if (methodHandler) return methodHandler(url, callback);
+	if (methodHandler) return methodHandler(url, callback, teardownWhenDone);
 
 	// Resolve the promise from the async function and return the station with the callback
 	// We shouldnt mix callbacks and promises but for backwards compatability I am breaking
 	// the law here......
 	return findStation(url)
-    .then(station => {
-      return callback(null, station);
-    })
-    .catch(err => {
-      return callback(err);
-    });
+		.then(station => {
+			return callback(null, station);
+		})
+		.catch(err => {
+			return callback(err);
+		});
 
 	/*
 	@params -> string: url of given stream
@@ -56,7 +56,7 @@ function getStationInfo(url, callback, method) {
 		return this.results;
 
 		//====================================================================================
-		//=                  Promise wrapper functions                                       =
+		//=									Promise wrapper functions																			 =
 		//====================================================================================
 		function V1(url) {
 			return new Promise((resolve, reject) => {
@@ -70,7 +70,7 @@ function getStationInfo(url, callback, method) {
 		}
 		function Icy(url) {
 			return new Promise((resolve, reject) => {
-				try {icystream.getStreamStation(url, function(error, station) {resolve(station);});} catch (err) {reject(err);}
+				try {icystream.getStreamStation(url, function(error, station) {resolve(station);}), false} catch (err) {reject(err);}
 			});
 		}
 		function Ice(url) {

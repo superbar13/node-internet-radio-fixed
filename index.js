@@ -9,7 +9,7 @@ var StreamSource = {
 	ICECAST: 'ICECAST'
 };
 
-function getStationInfo(url, callback, method) {
+function getStationInfo(url, callback, method, teardownWhenDone) {
 	var methodHandler = undefined;
 
 	switch (method) {
